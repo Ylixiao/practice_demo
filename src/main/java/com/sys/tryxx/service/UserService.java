@@ -3,6 +3,8 @@ package com.sys.tryxx.service;
 import com.sys.tryxx.Dao.UserRepository;
 import com.sys.tryxx.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional
+@CacheConfig(cacheNames = "lemonCache")
 public class UserService {
     @Autowired
     private UserRepository userRepository;
@@ -41,16 +44,17 @@ public class UserService {
      * @param id 用户ID
      * @return 用户
      */
+    @Cacheable
    public User getById(Integer id) {
         // 从缓存中获取用户信息
-        String key = "user_" + id;
-        ValueOperations<String, User> operations = redisTemplate.opsForValue();
+        /*String key = "user_" + id;
+            ValueOperations<String, User> operations = redisTemplate.opsForValue();
 
-        // 缓存存在
-        boolean hasKey = redisTemplate.hasKey(key);
-        if (hasKey) {
-            User user = operations.get(key);
-            return user;
+            // 缓存存在
+            boolean hasKey = redisTemplate.hasKey(key);
+            if (hasKey) {
+                User user = operations.get(key);
+                return user;
         }
 
         // 缓存不存在，从 DB 中获取
@@ -58,7 +62,9 @@ public class UserService {
         // 插入缓存
         operations.set(key, user, 10, TimeUnit.SECONDS);
 
-        return user;
+        return user;*/
+        System.out.println("没有缓存，开始查询数据库……");
+        return userRepository.getUserById(id);
     }
 
     /**

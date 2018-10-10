@@ -19,10 +19,9 @@ spring:
         max-wait: -1ms
     password: b840b7be6c52
   cache:
-    type: jcache
-    jcache:
-      provider: org.ehcache.jsr107.EhcacheCachingProvider
-      config: classpath:/config/ehcache.xml
+    type: ehcache
+    ehcache:
+      config: classpath:ehcache.xml
 
 
 
@@ -38,6 +37,7 @@ server:
 mybatis:
   type-aliases-package: com.sys.tryxx.domain
   mapper-locations: classpath:mapper/*.xml
+  show-sql: true
 
 #下面为连接池补充设置   
 initialSize: 5   

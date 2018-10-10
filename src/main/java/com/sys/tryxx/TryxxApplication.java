@@ -6,11 +6,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 
 
-@EnableCaching
+
 @SpringBootApplication
+@EnableCaching
 @MapperScan(basePackages = "com.sys.tryxx.domain")
 public class TryxxApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(TryxxApplication.class, args);
 	}
