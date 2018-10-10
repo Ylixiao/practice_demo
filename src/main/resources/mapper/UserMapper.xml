@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "com.sys.tryxx.domain.UserMapper">
+
+    <resultMap id = "result" type = "com.sys.tryxx.domain.User">
+        <id property = "id" column = "id"/>
+        <result property = "username" column = "username"/>
+        <result property = "password" column = "password"/>
+        <result property = "key0" column = "key0"/>
+        <result property = "description" column = "description"/>
+    </resultMap>
+    <select id = "findUserById" resultMap = "result">
+        SELECT * FROM syswin_user where id = #{id};
+    </select>
+    <select id = "findUserByName" resultMap = "result">
+        SELECT * FROM syswin_user where username = #{username};
+  </select>
+    <select id = "findUserByIdAndName" resultMap = "result">
+        SELECT * FROM syswin_user where  username = #{username} and password=#{password};
+    </select>
+
+    <insert id="addUser" >
+        insert  into syswin_user(id,username,password,key0,description) values (#{id},#{username},#{password},#{key0},#{description});
+    </insert>
+    <update id="updateUser">
+        update syswin_user set username = #{username} where id = #{id};
+    </update>
+</mapper>
