@@ -5,6 +5,8 @@ import com.sys.tryxx.domain.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class UserRespositoryImpl implements UserRepository {
 
@@ -23,6 +25,11 @@ public class UserRespositoryImpl implements UserRepository {
     @Override
     public User getUserByName(String username) {
         return userMapper.findUserByName(username);
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        return userMapper.findAllUsers();
     }
 
     @Override

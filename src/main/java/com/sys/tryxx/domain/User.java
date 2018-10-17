@@ -1,6 +1,8 @@
 package com.sys.tryxx.domain;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private Integer id;
     private String username;
     private String password;
@@ -16,6 +18,11 @@ public class User {
         this.password = password;
         this.key0 = key0;
         this.description = description;
+    }
+
+    public User(Integer id, String username) {
+        this.id = id;
+        this.username = username;
     }
 
     public Integer getId() {

@@ -1,55 +1,79 @@
-/*
 package com.sys.tryxx.config;
 
-import java.net.URISyntaxException;
-import javax.cache.Caching;
-import javax.cache.spi.CachingProvider;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.jcache.JCacheCacheManager;
+import org.springframework.cache.ehcache.EhCacheManagerUtils;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.Resource;
 import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.cache.RedisCacheManager.RedisCacheManagerBuilder;
+
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+@Configuration
+public class CacheConfig{
+    public static Logger logger = LoggerFactory.getLogger(CacheConfig.class);
 
-@EnableCaching@SuppressWarnings({ "rawtypes", "unchecked" })
-public class CacheConfig {
-    */
-/*	@Autowired	private RedisConnectionFactory factory;*//*
+    @Value("classpath:/ehcache.xml")
+    private Resource ehcacheConfig;
 
-    @Bean("redisCacheManager")
-    public RedisCacheManager redisCacheManager(@Qualifier("redisTemplate") RedisTemplate redisTemplate) {
-        //设置数据存入 redis 的序列化方式
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        */
-/*redisTemplate.setHashValueSerializer(new BaseEntity<>());
-        redisTemplate.setValueSerializer(new BaseEntity<>());*//*
+    @Bean
+    RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory){
+        RedisCacheManagerBuilder builder = RedisCacheManager.builder(redisConnectionFactory);
+        return builder.build();
+    }
 
-        RedisCacheManager cacheManager = new RedisCacheManager(redisTemplate);
+    @Bean
+    public RedisTemplate<String,Object> redisTemplate(RedisConnectionFactory factory){
+        RedisTemplate<String,Object> template = new RedisTemplate<String,Object>();
+        template.setConnectionFactory(factory);
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new JdkSerializationRedisSerializer());
+        return template;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean//Spring 中是否缺少对应的实例
+    public net.sf.ehcache.CacheManager innerEhCacheCacheManager(){
+        Resource location = ehcacheConfig;
+        if(location!=null){
+            return EhCacheManagerUtils.buildCacheManager(location);
+        }
+        return EhCacheManagerUtils.buildCacheManager();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public EhCacheCacheManager ehCacheCacheManager(net.sf.ehcache.CacheManager innerEhCacheCacheManager){
+        return new EhCacheCacheManager(innerEhCacheCacheManager);
+    }
+
+    /**
+     * Primary 是对于AppCaCheManager里面的这两个方法来注解的 不然会报错  没有一个主要的被标记的Bean
+     * 这里是不是哪个manager传进来有值，就用哪个了
+     * @param redisCacheManager
+     * @param ehCacheCacheManager
+     * @return
+     */
+    @Bean("cacheManager")
+    @Primary
+    public CacheManager cacheManager(RedisCacheManager redisCacheManager, EhCacheCacheManager ehCacheCacheManager) {
+        AppCacheManager cacheManager = new AppCacheManager();
+        cacheManager.setRedisCacheManager(redisCacheManager);
+        cacheManager.setEhCacheManager(ehCacheCacheManager);
         return cacheManager;
     }
-    @Bean("jCacheCacheManager")
-    public JCacheCacheManager jCacheCacheManager() throws URISyntaxException {
-        CachingProvider provider = Caching.getCachingProvider();
-        JCacheCacheManager jCacheCacheManager = new JCacheCacheManager();
-        javax.cache.CacheManager eh107CacheManager = provider.getCacheManager(getClass().getResource("/config/ehcache.xml").toURI(), getClass().getClassLoader());
-        jCacheCacheManager.setCacheManager(eh107CacheManager);
-        return jCacheCacheManager;    }
 
-        @Bean("cacheManager")
-            @Primary
-            public CacheManager initMixCacheManager(RedisCacheManager redisCacheManager, JCacheCacheManager ehCacheManager) {
-                AppCacheManager cacheManager = new AppCacheManager();
-                cacheManager.setRedisCacheManager(redisCacheManager);
-                cacheManager.setEhCacheCacheManager(ehCacheManager);
-                return cacheManager;
-    }
 
 
 
 }
-*/

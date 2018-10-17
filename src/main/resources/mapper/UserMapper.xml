@@ -20,11 +20,13 @@
     <select id = "findUserByIdAndName" resultMap = "result">
         SELECT * FROM syswin_user where  username = #{username} and password=#{password};
     </select>
-
+    <select id="findAllUsers" resultMap="result">
+        SELECT * FROM syswin_user;
+    </select>
     <insert id="addUser" >
         insert  into syswin_user(id,username,password,key0,description) values (#{id},#{username},#{password},#{key0},#{description});
     </insert>
-    <update id="updateUser">
+    <update id="updateById">
         update syswin_user set username = #{username} where id = #{id};
     </update>
 </mapper>

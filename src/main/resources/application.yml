@@ -19,18 +19,15 @@ spring:
         max-wait: -1ms
     password: b840b7be6c52
   cache:
-    type: ehcache
+    type: redis
+    cacheExpires:
+                100
     ehcache:
       config: classpath:ehcache.xml
 
-
-
-#    logging:
-#      level:
-#        ROOT: INFO
-#        com:
-#          xncoding: DEBUG
-#      file: D:/logs/app.log
+  logging:
+    level:
+      debug
 
 server:
   port: 8081

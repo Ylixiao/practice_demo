@@ -3,6 +3,8 @@ package com.sys.tryxx.domain;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserMapper {
 
@@ -16,5 +18,6 @@ public interface UserMapper {
        void addUser(User user);
        void updateById(User user);
        User findUserByIdAndName(@Param("username") String username, @Param("password") String password);
+       List<User> findAllUsers();
 }
 
