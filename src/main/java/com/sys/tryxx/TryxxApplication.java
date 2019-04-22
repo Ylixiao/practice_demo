@@ -9,7 +9,7 @@ import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication
 @EnableCaching
-@MapperScan(basePackages = "com.sys.tryxx.domain")
+@MapperScan("com.sys.tryxx.domain")
 public class TryxxApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TryxxApplication.class, args);

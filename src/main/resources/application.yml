@@ -1,13 +1,23 @@
 spring:
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://192.168.15.108:3316/mytest?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
-    username: app
-    password: temail#app
+    url: jdbc:mysql://localhost:3306/mytest?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+    username: 123
+    password: 123
     driver-class-name: com.mysql.jdbc.Driver
 
+  apache:
+    rocketmq:
+      consumer:
+        PushConsumer:
+          PushConsumer
+      producer:
+        producerGroup:
+          Producer
+      namesrvAddr:
+        192.168.15.222
+
   redis:
-    host: 192.168.15.190
+    host: 192.168.15.111
     port: 7389
     database: 0
     lettuce:
@@ -55,3 +65,16 @@ connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000Â  Â
 useGlobalDataSourceStat: true
 
 
+management:
+  server:
+    port: 54000
+    health:
+      mail:
+        enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    app:
+      name:tryxx
