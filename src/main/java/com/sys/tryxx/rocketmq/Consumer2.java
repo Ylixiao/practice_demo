@@ -8,23 +8,20 @@ import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 /**
  * @program: tryxx
  * @description:
  * @author: xiao
- * @create: 2018-12-07 16:39
+ * @create: 2019-04-26 15:28
  **/
-@Component
-public class Consumer {
-  //@Value("${apache.rocketmq.consumer.PushConsumer}")
+public class Consumer2 {
 
   public static void main(String[] args) {
     Logger logger = LoggerFactory.getLogger(Consumer.class);
 
     String pushConsumer = "PushConsumer23";
-    //服了我了 原来是端口号写错了 怪不得我总是消费不了
+//服了我了 原来是端口号写错了 怪不得我总是消费不了
     //@Value("${apache.rocketmq.namesrvAddr")
     String namesvrAddr = "192.168.15.37:9876";
 
@@ -38,7 +35,7 @@ public class Consumer {
       consumer.registerMessageListener((MessageListenerConcurrently) (list, context) -> {
         try {
           for (MessageExt messageExt : list) {
-            System.out.println("11111111111111111messageExt" + messageExt);//输出消息内容
+            System.out.println("22222222messageExt" + messageExt);//输出消息内容
 
 //          String messageBody = new String(messageExt.getBody(), "utf-8");
 //

@@ -28,7 +28,7 @@ public class Producer {
     producer.setNamesrvAddr(namesvrAddr);
     try {
       producer.start();
-      for (int i = 0; i < 103; i++) {
+      for (int i = 0; i < 10; i++) {
         String messageBody = "看我的,请接收" + i;
         String message = new String((messageBody.getBytes()), "utf-8");
         //就可以开始构建信息啦
