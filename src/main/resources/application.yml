@@ -78,3 +78,13 @@ management:
   info:
     app:
       name:tryxx
+student:
+  name:
+    "jack"
+  age:
+    33
+teacher:
+  name:
+    "Danny"
+  gender:
+    "male"

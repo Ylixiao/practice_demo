@@ -2,6 +2,8 @@ package com.sys.tryxx.service;
 
 import com.sys.tryxx.Dao.UserRepository;
 import com.sys.tryxx.domain.User;
+import com.sys.tryxx.rocketmq.Consumer;
+import com.sys.tryxx.rocketmq.Producer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +59,7 @@ public class UserService {
      * @return 用户
      */
     @Cacheable(value = "lemonCache")
-   public User getById(Integer id) {
+    public User getById(Integer id) {
         // 从缓存中获取用户信息
         String key = "user_"+id;
        /* if(ehCacheCacheManager.getCacheNames().contains(key)){
@@ -86,7 +88,7 @@ public class UserService {
      *
      * @param user 用户
      */
-/*    @CachePut(value = "lemonCache")
+    @CachePut(value = "lemonCache")
     public void updateUser(User user) {
         userRepository.updateById(user);
         int userId = user.getId();
@@ -96,7 +98,7 @@ public class UserService {
         if (hasKey) {
             redisTemplate.delete(key);
         }
-    }*/
+    }
 
     public List<User> getAllUsers(){
         List<User> users = userRepository.findAllUsers();
@@ -124,9 +126,9 @@ public class UserService {
     /**
      * 用户登录
      */
-   @Cacheable(value="lemonCache",key="'user_'+#username+#password")
+    @Cacheable(value="lemonCache",key="'user_'+#username+#password")
     public String login(String username,String password){
-       String key  = "user_"+username+password;
+        String key  = "user_"+username+password;
         ValueOperations<String,User> operations = redisTemplate.opsForValue();
         boolean hasKey = redisTemplate.hasKey(key);
         if(hasKey){
@@ -136,8 +138,8 @@ public class UserService {
         }
 
         logger.info("从数据库验证用户身份。。。");
-       User user = userRepository.findUserByIdAndName(username,password);
-       operations.set(key,user,100,TimeUnit.SECONDS);
+        User user = userRepository.findUserByIdAndName(username,password);
+        operations.set(key,user,100,TimeUnit.SECONDS);
         if(user!=null){
             return "登录中。。。";
         }else {
