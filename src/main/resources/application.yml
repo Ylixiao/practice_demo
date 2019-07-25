@@ -1,8 +1,9 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/mytest?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
-    username: 123
-    password: 123
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://192.168.**.**:3316/mytest?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+    username: 111
+    password: 111
     driver-class-name: com.mysql.jdbc.Driver
 
   apache:
@@ -14,11 +15,14 @@ spring:
         producerGroup:
           Producer
       namesrvAddr:
-        192.168.15.222
-
+        192.168.**.**
+  data:
+    mongodb:
+      uri:
+        mongodb://192.168.*.*:27017/app_name
   redis:
-    host: 192.168.15.111
-    port: 7389
+    host: 192.168.**.**
+    port: 6379
     database: 0
     lettuce:
       shutdown-timeout: 200ms
@@ -27,11 +31,11 @@ spring:
         max-idle: 7
         min-idle: 2
         max-wait: -1ms
-    password: b840b7be6c52
+    password: *
   cache:
     type: redis
     cacheExpires:
-                100
+      100
     ehcache:
       config: classpath:ehcache.xml
 
